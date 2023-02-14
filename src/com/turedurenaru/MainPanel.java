@@ -20,4 +20,8 @@ public class MainPanel extends JPanel{
         result = ip.getSum();
         return result;
     }
+
+    public void allClear(){
+        ip.allClear();
+    }
 }

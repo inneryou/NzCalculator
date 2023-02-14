@@ -34,6 +34,12 @@ public class InputPanel extends JPanel{
         return result;
     }
 
+    public void allClear(){
+        for(InputRow ir: aryInputRow){
+            ir.clear();
+        }
+    }
+
     private void setInputRow(int id){
         InputRow ir = new InputRow(id);
         aryInputRow.add(ir);

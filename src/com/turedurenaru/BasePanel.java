@@ -16,4 +16,8 @@ public class BasePanel extends JPanel{
     public double getSum(){
         return mp.getSum();
     }
+
+    public void allClear(){
+        mp.allClear();
+    }
 }

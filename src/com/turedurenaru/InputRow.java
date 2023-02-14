@@ -20,9 +20,11 @@ public class InputRow extends JPanel implements ActionListener{
         textField.addActionListener(this);
         textWithoutTax = new JTextField(8);
         textField.setHorizontalAlignment(JTextField.RIGHT);
+        JLabel labelId = new JLabel(String.valueOf(id+1));
         JLabel label = new JLabel("税込");
         textWithoutTax.setHorizontalAlignment(JTextField.RIGHT);
         JLabel label2 = new JLabel("税抜");
+        add(labelId);
         add(label);
         add(textField);
         add(label2);
@@ -33,6 +35,11 @@ public class InputRow extends JPanel implements ActionListener{
         return this.id;
     }
 
+    public void clear(){
+        textField.setText("");
+        textWithoutTax.setText("");
+    }
+
     public String getInputText(){
         return textField.getText();
     }
@@ -41,7 +48,7 @@ public class InputRow extends JPanel implements ActionListener{
         System.out.println("TEST");
         Object obj = e.getSource();
         if(obj instanceof JTextField){
-            textWithoutTax.setText(String.format("%f" ,Double.parseDouble(((JTextField)obj).getText())/1.05));
+            textWithoutTax.setText(String.format("%f" ,Double.parseDouble(((JTextField)obj).getText())/1.1));
         }
     }
 }
