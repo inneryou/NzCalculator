@@ -43,6 +43,11 @@ public class InputRow extends JPanel implements ActionListener{
     public String getInputText(){
         return textField.getText();
     }
+
+    public void setTextField(int price){
+        textField.setText(String.valueOf(price));
+    }
+    
     @Override
     public void actionPerformed(ActionEvent e) {
         System.out.println("TEST");

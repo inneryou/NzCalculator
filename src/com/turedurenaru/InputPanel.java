@@ -44,4 +44,12 @@ public class InputPanel extends JPanel{
         InputRow ir = new InputRow(id);
         aryInputRow.add(ir);
     }
+
+    public void setTaxInclude(int price){
+        for(InputRow ir: aryInputRow){
+            if(ir.getInputText() == ""){
+                ir.setTextField(price);
+            }
+        }
+    }
 }

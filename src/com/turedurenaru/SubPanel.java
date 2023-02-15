@@ -4,43 +4,49 @@ import java.awt.*;
 import java.awt.event.*;
 
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 public class SubPanel extends JPanel implements ActionListener{
     private JTextField resultField;
     private JTextField pointField;
-    private BasePanel parent;
+    private JFrame parentFrame;
     private JButton buttonSum;
     private JButton buttonAllClear;
-    public SubPanel(BasePanel parent){
+    private JButton btnOpenSubWindow;
+    public SubPanel(JFrame parent){
+        super();
         setLayout(new FlowLayout());
-        this.parent = parent;
+        this.parentFrame = parent;
+
+        // アクションの設定
+        MyFrameAction action = new MyFrameAction();
+        action.setParentFrame(parentFrame);
+
         resultField = new JTextField(8);
         pointField = new JTextField(8);
         buttonSum = new JButton("合計");
         buttonSum.setActionCommand("Calc Sum");
         buttonSum.addActionListener(this);
+        btnOpenSubWindow = new JButton("ペーストパネル");
+        btnOpenSubWindow.setActionCommand("BUTTON_CLICKED");
+        btnOpenSubWindow.addActionListener(action);
         buttonAllClear = new JButton("AllClear");
         buttonAllClear.setActionCommand("All Clear");
         buttonAllClear.addActionListener(this);
+
         add(resultField);
         add(pointField);
         add(buttonSum);
         add(buttonAllClear);
+        add(btnOpenSubWindow);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
         Object obj = e.getSource();
         if(obj instanceof JButton){
-            if(((JButton)obj).getActionCommand() == "Calc Sum"){
-                resultField.setText(String.format("%f",parent.getSum()));
-                pointField.setText(String.format("%f",Double.parseDouble(resultField.getText())/100));
-            }
-            if(((JButton)obj).getActionCommand() == "All Clear"){
-                parent.allClear();
-                resultField.setText("");
-            }
+            System.out.println("Button clicked");
         }
     }
 }

@@ -24,4 +24,8 @@ public class MainPanel extends JPanel{
     public void allClear(){
         ip.allClear();
     }
+
+    public void setTaxInclude(int price){
+        ip.setTaxInclude(price);
+    }
 }
