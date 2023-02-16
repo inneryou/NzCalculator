@@ -4,14 +4,12 @@ import java.awt.event.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 public class ArticleAnalysis implements ActionListener{
     private JTextArea ta;
-    private JFrame parentFrame;
-    public ArticleAnalysis(JFrame parentFrame,JTextArea textArea){
+    private MainFrame parentFrame;
+    public ArticleAnalysis(MainFrame parentFrame,JTextArea textArea){
         ta = textArea;
         this.parentFrame = parentFrame;
     }

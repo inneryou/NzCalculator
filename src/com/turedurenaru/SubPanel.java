@@ -7,22 +7,28 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.border.LineBorder;
+import javax.swing.JTextArea;
 
 public class SubPanel extends JPanel implements ActionListener{
     private JTextField resultField;
     private JTextField pointField;
-    private JFrame parentFrame;
+    private MainFrame parent;
     private JButton buttonSum;
     private JButton buttonAllClear;
     private JButton btnOpenSubWindow;
-    public SubPanel(JFrame parent){
+    private JTextArea cpArea;
+
+    public SubPanel(MainFrame parent){
         super();
         setLayout(new FlowLayout());
-        this.parentFrame = parent;
+        this.parent = parent;
+        cpArea = new JTextArea(10,20);
+        cpArea.setBorder(new LineBorder(Color.GRAY));
 
-        // アクションの設定
-        MyFrameAction action = new MyFrameAction();
-        action.setParentFrame(parentFrame);
+        // // アクションの設定
+        // MyFrameAction action = new MyFrameAction();
+        // action.setParentFrame(parentFrame);
 
         resultField = new JTextField(8);
         pointField = new JTextField(8);
@@ -31,7 +37,7 @@ public class SubPanel extends JPanel implements ActionListener{
         buttonSum.addActionListener(this);
         btnOpenSubWindow = new JButton("ペーストパネル");
         btnOpenSubWindow.setActionCommand("BUTTON_CLICKED");
-        btnOpenSubWindow.addActionListener(action);
+        btnOpenSubWindow.addActionListener(this);
         buttonAllClear = new JButton("AllClear");
         buttonAllClear.setActionCommand("All Clear");
         buttonAllClear.addActionListener(this);
@@ -41,12 +47,21 @@ public class SubPanel extends JPanel implements ActionListener{
         add(buttonSum);
         add(buttonAllClear);
         add(btnOpenSubWindow);
+        add(cpArea);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
         Object obj = e.getSource();
-        if(obj instanceof JButton){
-            System.out.println("Button clicked");
+        String cmd = e.getActionCommand();
+        if(cmd == "BUTTON_CLICKED"){
+            SubSingletonFrame.getInstance(parent);
+            String[] aryStr = cpArea.getText().split("\n");
+            for(int i=0;i<aryStr.length;i++){
+                if(aryStr[i].indexOf("税込")>-1){
+                    System.out.println("TSDT");
+                    
+                }
+            }
         }
     }
 }

@@ -5,17 +5,16 @@ import java.awt.event.*;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 
 public class MyFrameAction extends AbstractAction {
 
-    private JFrame parentFrame = null;
+    private MainFrame parentFrame = null;
 
     public MyFrameAction(){
         super();
     }
 
-    public void setParentFrame(JFrame parentFrame){
+    public void setParentFrame(MainFrame parentFrame){
         this.parentFrame = parentFrame;
     }
 

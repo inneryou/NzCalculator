@@ -11,9 +11,9 @@ public class SubSingletonFrame extends JFrame implements ActionListener{
     private static SubSingletonFrame uniqueInstance = null;
     private JTextArea pastArea;
     private JButton btnAnalysis;
-    private JFrame parentFrame;
+    private MainFrame parentFrame;
 
-    private SubSingletonFrame(JFrame parentFrame) {
+    private SubSingletonFrame(MainFrame parentFrame) {
         super();
         this.parentFrame = parentFrame;
         pastArea = new JTextArea();
@@ -25,7 +25,7 @@ public class SubSingletonFrame extends JFrame implements ActionListener{
         getContentPane().add(btnAnalysis,BorderLayout.SOUTH);
     }
 
-    public static SubSingletonFrame getInstance( JFrame parentFrame ) {
+    public static SubSingletonFrame getInstance(MainFrame parentFrame) {
 
         if ( uniqueInstance == null ) {
             uniqueInstance = new SubSingletonFrame(parentFrame);

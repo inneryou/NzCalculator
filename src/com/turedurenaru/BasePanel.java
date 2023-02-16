@@ -2,17 +2,16 @@ package com.turedurenaru;
 
 import java.awt.*;
 
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public class BasePanel extends JPanel{
-    private JFrame parentFrame;
+    private MainFrame parentFrame;
     private MainPanel mp;
-    public BasePanel(JFrame parentFrame){
+    public BasePanel(MainFrame parentFrame){
         this.parentFrame = parentFrame;
         setLayout(new GridLayout(2,1));
         mp = new MainPanel();
-        SubPanel sp = new SubPanel(this.parentFrame);
+        SubPanel sp = new SubPanel(parentFrame);
         add(mp);
         add(sp);
     }
