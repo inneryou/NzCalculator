@@ -2,10 +2,16 @@ package com.turedurenaru;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 import javax.swing.JTextArea;
@@ -18,13 +24,20 @@ public class SubPanel extends JPanel implements ActionListener{
     private JButton buttonAllClear;
     private JButton btnOpenSubWindow;
     private JTextArea cpArea;
+    private JButton btnUrl;
+    private JScrollPane scroll;
+    private JPanel panel;
 
     public SubPanel(MainFrame parent){
         super();
-        setLayout(new FlowLayout());
+        GridBagLayout gblayout = new GridBagLayout();
+        setLayout(gblayout);
         this.parent = parent;
         cpArea = new JTextArea(10,20);
         cpArea.setBorder(new LineBorder(Color.GRAY));
+        cpArea.setLineWrap(true);
+        panel = new JPanel();
+        panel.setLayout(new GridLayout(6,1));
 
         // // アクションの設定
         // MyFrameAction action = new MyFrameAction();
@@ -41,13 +54,41 @@ public class SubPanel extends JPanel implements ActionListener{
         buttonAllClear = new JButton("AllClear");
         buttonAllClear.setActionCommand("All Clear");
         buttonAllClear.addActionListener(this);
+        btnUrl = new JButton("URL");
+        btnUrl.setActionCommand("Open url");
+        btnUrl.addActionListener(this);
+        scroll = new JScrollPane();
+        scroll.setViewportView(cpArea);
 
-        add(resultField);
-        add(pointField);
-        add(buttonSum);
-        add(buttonAllClear);
-        add(btnOpenSubWindow);
-        add(cpArea);
+        
+        panel.add(resultField);
+        panel.add(pointField);
+        panel.add(buttonSum);
+        panel.add(buttonAllClear);
+        panel.add(btnOpenSubWindow);
+        panel.add(btnUrl);
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.insets = new Insets(1,1,1,1);
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gblayout.setConstraints(scroll, gbc);
+        add(scroll);
+
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        gbc.gridwidth = 1;
+        gbc.gridheight = 1;
+        gbc.insets = new Insets(1,1,1,1);
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gblayout.setConstraints(panel, gbc);
+        add(panel);
     }
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -59,8 +100,28 @@ public class SubPanel extends JPanel implements ActionListener{
             for(int i=0;i<aryStr.length;i++){
                 if(aryStr[i].indexOf("税込")>-1){
                     System.out.println("TSDT");
-                    
                 }
+            }
+        }
+        if(cmd == "Open url"){
+            InputStreamReader isr = null;
+            try {
+                URL url = new URL("http://innerfashion.sakura.ne.jp/");
+                InputStream is = url.openStream();
+                isr = new InputStreamReader(is);
+                int data = is.read();
+                while(data != -1){
+                    cpArea.append(String.valueOf((char)data));
+                    data = is.read();
+                }
+            } catch (MalformedURLException e1) {
+                e1.printStackTrace();
+            }catch(IOException ie){
+                ie.printStackTrace();
+            }finally{
+                try {
+                    isr.close();
+                } catch (IOException e1) {}
             }
         }
     }
