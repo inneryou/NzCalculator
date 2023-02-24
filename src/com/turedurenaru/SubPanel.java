@@ -9,7 +9,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -81,7 +80,7 @@ public class SubPanel extends JPanel implements ActionListener{
 
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 1;
-        gbc.gridy = 0;
+        gbc.gridy = 0 ;
         gbc.gridwidth = 1;
         gbc.gridheight = 1;
         gbc.insets = new Insets(1,1,1,1);
@@ -92,7 +91,6 @@ public class SubPanel extends JPanel implements ActionListener{
     }
     @Override
     public void actionPerformed(ActionEvent e) {
-        Object obj = e.getSource();
         String cmd = e.getActionCommand();
         if(cmd == "BUTTON_CLICKED"){
             SubSingletonFrame.getInstance(parent);
