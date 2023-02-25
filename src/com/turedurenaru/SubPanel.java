@@ -13,6 +13,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
+
+import javax.xml.parsers.*;
 import javax.swing.JTextArea;
 
 public class SubPanel extends JPanel implements ActionListener{
@@ -58,6 +65,7 @@ public class SubPanel extends JPanel implements ActionListener{
         btnUrl.setActionCommand("Open url");
         btnUrl.addActionListener(this);
         btnDownload = new JButton("Download");
+        btnDownload.setActionCommand("Download driver");
         btnDownload.addActionListener(new DriverDownload(parent));
         scroll = new JScrollPane();
         scroll.setViewportView(cpArea);
@@ -108,22 +116,30 @@ public class SubPanel extends JPanel implements ActionListener{
         if(cmd == "Open url"){
             InputStreamReader isr = null;
             try {
-                URL url = new URL("http://innerfashion.sakura.ne.jp/");
+                URL url = new URL("https://chromedriver.storage.googleapis.com");
                 InputStream is = url.openStream();
+                // Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
+                // Element driver = doc.getDocumentElement();
+                // cpArea.setText(doc.toString());
                 isr = new InputStreamReader(is);
                 int data = is.read();
                 while(data != -1){
-                    cpArea.append(String.valueOf((char)data));
+                    // cpArea.append(String.valueOf((char)data));
+                    System.out.print(data);
                     data = is.read();
                 }
+            // }catch(SAXException se){
+            //     se.printStackTrace();
+            // }catch(ParserConfigurationException pe){
+            //     pe.printStackTrace();
             } catch (MalformedURLException e1) {
                 e1.printStackTrace();
             }catch(IOException ie){
                 ie.printStackTrace();
             }finally{
-                try {
-                    isr.close();
-                } catch (IOException e1) {}
+                // try {
+                //     // isr.close();
+                // } catch (IOException e1) {}
             }
         }
     }

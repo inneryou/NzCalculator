@@ -38,23 +38,19 @@ public class DriverDownload implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         String fileName = "chromedriver.zip";
-        try {
-            URL url = new URL("https://chromedriver.storage.googleapis.com/111.0.5563.19/chromedriver_linux64.zip");
-            if(downloadFile(url, fileName, this.parent)){
-                System.out.println("Show dialog...");
-                JDialog dialog = new JDialog();
-                dialog.setLayout(new FlowLayout());
-                JButton btnOK = new JButton("OK");
-                JLabel label = new JLabel("ダウンロードが完了しました。");
-                dialog.getContentPane().add(label);
-                dialog.getContentPane().add(btnOK);
-                dialog.pack();
-                dialog.setVisible(true);
-                dialog.setTitle("ダウンロード");
-                dialog.setPreferredSize(new Dimension(200,200));
-            }
-        } catch (MalformedURLException e1) {
-            e1.printStackTrace();
+        String cmd = e.getActionCommand();
+        
+        if(cmd == "Download driver"){
+            ChromeDriverDownloader cdd = new ChromeDriverDownloader();
+            // try {
+            //     URL url = new URL("https://chromedriver.storage.googleapis.com/111.0.5563.19/chromedriver_linux64.zip");
+            //     if(downloadFile(url, fileName, this.parent)){
+            //         System.out.println("Show dialog...");
+            //         MyDialog dialog = new MyDialog("ダウンロードが完了しました。",MyDialogType.OK_ONLY);
+            //     }
+            // } catch (MalformedURLException e1) {
+            //     e1.printStackTrace();
+            // }
         }
     }
 }
