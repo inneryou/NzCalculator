@@ -22,6 +22,7 @@ public class SubPanel extends JPanel implements ActionListener{
     private JButton buttonSum;
     private JButton buttonAllClear;
     private JButton btnOpenSubWindow;
+    private JButton btnDownload;
     private JTextArea cpArea;
     private JButton btnUrl;
     private JScrollPane scroll;
@@ -36,7 +37,7 @@ public class SubPanel extends JPanel implements ActionListener{
         cpArea.setBorder(new LineBorder(Color.GRAY));
         cpArea.setLineWrap(true);
         panel = new JPanel();
-        panel.setLayout(new GridLayout(6,1));
+        panel.setLayout(new GridLayout(7,1));
 
         // // アクションの設定
         // MyFrameAction action = new MyFrameAction();
@@ -56,6 +57,8 @@ public class SubPanel extends JPanel implements ActionListener{
         btnUrl = new JButton("URL");
         btnUrl.setActionCommand("Open url");
         btnUrl.addActionListener(this);
+        btnDownload = new JButton("Download");
+        btnDownload.addActionListener(new DriverDownload(parent));
         scroll = new JScrollPane();
         scroll.setViewportView(cpArea);
 
@@ -66,6 +69,7 @@ public class SubPanel extends JPanel implements ActionListener{
         panel.add(buttonAllClear);
         panel.add(btnOpenSubWindow);
         panel.add(btnUrl);
+        panel.add(btnDownload);
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.fill = GridBagConstraints.BOTH;
         gbc.gridx = 0;
