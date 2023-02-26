@@ -2,9 +2,12 @@ package com.turedurenaru;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -17,6 +20,8 @@ import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.*;
@@ -114,32 +119,41 @@ public class SubPanel extends JPanel implements ActionListener{
             }
         }
         if(cmd == "Open url"){
-            InputStreamReader isr = null;
-            try {
-                URL url = new URL("https://chromedriver.storage.googleapis.com");
-                InputStream is = url.openStream();
-                // Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(is);
-                // Element driver = doc.getDocumentElement();
-                // cpArea.setText(doc.toString());
-                isr = new InputStreamReader(is);
-                int data = is.read();
-                while(data != -1){
-                    // cpArea.append(String.valueOf((char)data));
-                    System.out.print(data);
-                    data = is.read();
-                }
-            // }catch(SAXException se){
-            //     se.printStackTrace();
-            // }catch(ParserConfigurationException pe){
-            //     pe.printStackTrace();
-            } catch (MalformedURLException e1) {
-                e1.printStackTrace();
+            URL url = null;
+            HttpURLConnection connection = null;
+            InputStream xml = null;
+            Document doc = null;
+            try{
+                url = new URL("https://chromedriver.storage.googleapis.com/");
+                connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setRequestProperty("Accept", "application/xml");
+                xml = connection.getInputStream();
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                doc = builder.parse(xml);
+            }catch(SAXException se){
+                se.printStackTrace();
+            }catch(ParserConfigurationException pe){
+                pe.printStackTrace();
+            }catch(MalformedURLException me){
+                me.printStackTrace();
             }catch(IOException ie){
                 ie.printStackTrace();
-            }finally{
-                // try {
-                //     // isr.close();
-                // } catch (IOException e1) {}
+            }
+
+            // ルート要素を取得する
+            Node root = doc.getDocumentElement();
+            System.out.println("ルート要素: " + root.getNodeName());
+
+            // 子ノードを取得する
+            NodeList list = root.getChildNodes();
+            for (int i = 0; i < list.getLength(); i++) {
+                Node node = list.item(i);
+                if (node.getNodeType() == Node.ELEMENT_NODE) {
+                    System.out.println("ノード名: " + node.getNodeName());
+                    System.out.println("値: " + node.getTextContent());
+                }
             }
         }
     }
