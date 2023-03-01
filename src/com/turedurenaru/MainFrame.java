@@ -10,9 +10,10 @@ public class MainFrame extends JFrame{
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setTitle(title);
         basePanel = new BasePanel(this);
+        JStatusBar statusBar = new JStatusBar();
         BottomPanel bp = new BottomPanel();
         this.getContentPane().add(basePanel,BorderLayout.CENTER);
-        this.getContentPane().add(bp,BorderLayout.SOUTH);
+        this.getContentPane().add(statusBar,BorderLayout.SOUTH);
         this.setVisible(true);
     }
     public void setTaxInclude(int price){

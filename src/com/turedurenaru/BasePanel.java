@@ -49,6 +49,9 @@ public class BasePanel extends JPanel{
         sb.append("<p><b>太文字</b></p>");
         sb.append("<p><i>イタリック文字</i></p>");
         sb.append("<p><font color=\"rgb(255,100,50)\">FONT COLOR</font></p>");
+        sb.append("<p>洗濯機がエラーE22<br />内蓋、洗剤投入口のエラーらしい</p>");
+        sb.append("<p><a href=\"https://google.co.jp\">Google</a></p>");
+        
         sb.append("</body></html>");
         dp.setMessage(sb.toString());
     }

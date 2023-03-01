@@ -145,7 +145,7 @@ public class SubPanel extends JPanel implements ActionListener{
             // ルート要素を取得する
             Node root = doc.getDocumentElement();
             System.out.println("ルート要素: " + root.getNodeName());
-
+ 
             // 子ノードを取得する
             NodeList list = root.getChildNodes();
             for (int i = 0; i < list.getLength(); i++) {
