@@ -5,6 +5,8 @@ import java.awt.*;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import com.jgoodies.forms.layout.FormLayout;
+
 public class JStatusBar extends JPanel{
     private JPanel contentPanel;
     public JStatusBar(){
@@ -47,5 +49,7 @@ public class JStatusBar extends JPanel{
         contentPanel = new JPanel();
         contentPanel.setOpaque(false);
         add(contentPanel, BorderLayout.CENTER);
+
+        // FormLayout layout = new FormLayout();
     }
 }
