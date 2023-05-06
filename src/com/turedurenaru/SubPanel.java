@@ -2,12 +2,9 @@ package com.turedurenaru;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -16,15 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
-import javax.xml.parsers.DocumentBuilderFactory;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.*;
 import javax.swing.JTextArea;
 
 public class SubPanel extends JPanel implements ActionListener{
@@ -35,7 +23,7 @@ public class SubPanel extends JPanel implements ActionListener{
     private JButton buttonAllClear;
     private JButton btnOpenSubWindow;
     private JButton btnDownload;
-    private JTextArea cpArea;
+    public static JTextArea cpArea;
     private JButton btnUrl;
     private JScrollPane scroll;
     private JPanel panel;
@@ -48,6 +36,9 @@ public class SubPanel extends JPanel implements ActionListener{
         cpArea = new JTextArea(10,20);
         cpArea.setBorder(new LineBorder(Color.GRAY));
         cpArea.setLineWrap(true);
+        PasetPanel pp = new PasetPanel();
+        JScrollPane scroll2 = new JScrollPane();
+        scroll2.setViewportView(pp);
         panel = new JPanel();
         panel.setLayout(new GridLayout(7,1));
 
@@ -70,7 +61,6 @@ public class SubPanel extends JPanel implements ActionListener{
         btnUrl.setActionCommand("Open url");
         btnUrl.addActionListener(this);
         btnDownload = new JButton("Download");
-        btnDownload.setActionCommand("Download driver");
         btnDownload.addActionListener(new DriverDownload(parent));
         scroll = new JScrollPane();
         scroll.setViewportView(cpArea);
@@ -119,41 +109,24 @@ public class SubPanel extends JPanel implements ActionListener{
             }
         }
         if(cmd == "Open url"){
-            URL url = null;
-            HttpURLConnection connection = null;
-            InputStream xml = null;
-            Document doc = null;
-            try{
-                url = new URL("https://chromedriver.storage.googleapis.com/");
-                connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setRequestProperty("Accept", "application/xml");
-                xml = connection.getInputStream();
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                doc = builder.parse(xml);
-            }catch(SAXException se){
-                se.printStackTrace();
-            }catch(ParserConfigurationException pe){
-                pe.printStackTrace();
-            }catch(MalformedURLException me){
-                me.printStackTrace();
+            InputStreamReader isr = null;
+            try {
+                URL url = new URL("http://innerfashion.sakura.ne.jp/");
+                InputStream is = url.openStream();
+                isr = new InputStreamReader(is);
+                int data = is.read();
+                while(data != -1){
+                    cpArea.append(String.valueOf((char)data));
+                    data = is.read();
+                }
+            } catch (MalformedURLException e1) {
+                e1.printStackTrace();
             }catch(IOException ie){
                 ie.printStackTrace();
-            }
-
-            // ルート要素を取得する
-            Node root = doc.getDocumentElement();
-            System.out.println("ルート要素: " + root.getNodeName());
- 
-            // 子ノードを取得する
-            NodeList list = root.getChildNodes();
-            for (int i = 0; i < list.getLength(); i++) {
-                Node node = list.item(i);
-                if (node.getNodeType() == Node.ELEMENT_NODE) {
-                    System.out.println("ノード名: " + node.getNodeName());
-                    System.out.println("値: " + node.getTextContent());
-                }
+            }finally{
+                try {
+                    isr.close();
+                } catch (IOException e1) {}
             }
         }
     }

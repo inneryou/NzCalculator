@@ -20,6 +20,7 @@ public class ArticleAnalysis implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         if(e.getActionCommand() == "Analysis"){
+            System.out.println("Analysis button clicked!");
             String[] aryStr = ta.getText().split("\n");
             for(int i=0;i<aryStr.length;i++){
                 if(aryStr[i].indexOf("税込価格")>-1){
@@ -30,6 +31,13 @@ public class ArticleAnalysis implements ActionListener{
                     }
                 }
             }
+            StringBuffer sb = new StringBuffer();
+            for(int i = 0; i < PasetPanel.taList.size(); i++){
+                sb.append(PasetPanel.taList.get(i).getText().toString());
+                sb.append("\n");
+            }
+            String str = sb.toString();
+            SubPanel.cpArea.setText(str);
         }
     }
     

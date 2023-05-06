@@ -1,68 +1,71 @@
 package com.turedurenaru;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.URL;
+import java.nio.channels.Channels;
+import java.nio.channels.ReadableByteChannel;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class ChromeDriverDownloader {
-    String chromeVersion;
-    String chromeDriverVersion;
     public ChromeDriverDownloader() {
-        chromeVersion = getChromeVersion();
-        chromeDriverVersion = getChromeDriverVersion(chromeVersion);
-        downloadChromeDriver(chromeDriverVersion);
-    }
-
-    private static String getChromeVersion() {
-        try {
-            Process process = Runtime.getRuntime().exec("google-chrome --version");
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                if (line.startsWith("Google Chrome")) {
-                    String[] parts = line.split("\\s");
-                    return parts[2];
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    private static String getChromeDriverVersion(String chromeVersion) {
-        String[] parts = chromeVersion.split("\\.");
-        int majorVersion = Integer.parseInt(parts[0]);
-        System.out.println(majorVersion);
-        URL url = null;
-        try{
-            switch (majorVersion) {
-                case 110:
-                    url = new URL("https://chromedriver.storage.googleapis.com/110.0.5481.77/chromedriver_linux64.zip");
-                    break;
-                case 91:
-                    url = new URL("https://chromedriver.storage.googleapis.com/91.0.4472.19/chromedriver_linux64.zip");
-                    break;
-                case 92:
-                    url = new URL("https://chromedriver.storage.googleapis.com/92.0.4515.107/chromedriver_linux64.zip");
-                    break;
-                default:
-                    throw new IllegalArgumentException("Chrome version not supported");
-            }
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-        return url.toString();
-    }
-
-    private static void downloadChromeDriver(String chromeDriverUrl) {
+        String chromeDriverUrl = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE";
+        String chromeDriverVersion = "";
         try {
             URL url = new URL(chromeDriverUrl);
-            java.nio.file.Files.copy(url.openStream(), java.nio.file.Paths.get("chromedriver.zip"));
-            System.out.println("ChromeDriver downloaded successfully");
-        } catch (IOException e) {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            chromeDriverVersion = reader.readLine();
+            reader.close();
+        } catch (Exception e) {
             e.printStackTrace();
+        }
+        String downloadUrl = "https://chromedriver.storage.googleapis.com/" + chromeDriverVersion + "/chromedriver_win32.zip";
+        try {
+            URL url = new URL(downloadUrl);
+            ReadableByteChannel rbc = Channels.newChannel(url.openStream());
+            FileOutputStream fos = new FileOutputStream("chromedriver.zip");
+            fos.getChannel().transferFrom(rbc, 0, Long.MAX_VALUE);
+            fos.close();
+            rbc.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            unzip("chromedriver.zip", ".");
+            new File("chromedriver.zip").delete();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void unzip(String zipFilePath, String destDirectory) throws IOException {
+        File destDir = new File(destDirectory);
+        if (!destDir.exists()) {
+            destDir.mkdir();
+        }
+        try (ZipInputStream zipIn = new ZipInputStream(new FileInputStream(zipFilePath))) {
+            ZipEntry entry = zipIn.getNextEntry();
+            while (entry != null) {
+                String filePath = destDirectory + File.separator + entry.getName();
+                if (!entry.isDirectory()) {
+                    extractFile(zipIn, filePath);
+                } else {
+                    File dir = new File(filePath);
+                    dir.mkdir();
+                }
+                zipIn.closeEntry();
+                entry = zipIn.getNextEntry();
+            }
+        }
+    }
+
+    private static void extractFile(ZipInputStream zipIn, String filePath) throws IOException {
+        try (BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(filePath))) {
+            byte[] bytesIn = new byte[4096];
+            int read = 0;
+            while ((read = zipIn.read(bytesIn)) != -1) {
+                bos.write(bytesIn, 0, read);
+            }
         }
     }
 }

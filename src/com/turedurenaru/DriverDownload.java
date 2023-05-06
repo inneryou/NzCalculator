@@ -2,9 +2,7 @@ package com.turedurenaru;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.channels.Channels;
@@ -14,11 +12,39 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.WindowConstants;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public class DriverDownload implements ActionListener{
     private MainFrame parent;
+    private static JDialog dialog;
+    private JButton btnOK;
+    private JLabel label;
+    private String downloadUrl;
     public DriverDownload(MainFrame parent){
         this.parent = parent;
+        String chromeDriverUrl = "https://chromedriver.storage.googleapis.com/LATEST_RELEASE";
+        String chromeDriverVersion = "";
+        try {
+            URL url = new URL(chromeDriverUrl);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream()));
+            chromeDriverVersion = reader.readLine();
+            reader.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        downloadUrl = "https://chromedriver.storage.googleapis.com/" + chromeDriverVersion + "/chromedriver_win32.zip";
+        
+        dialog = new JDialog();
+        dialog.setLayout(new FlowLayout());
+        btnOK = new JButton("OK");
+        btnOK.setActionCommand("Download complete");
+        btnOK.addActionListener(this);
+        label = new JLabel("ダウンロードが完了しました。");
+        dialog.getContentPane().add(label);
+        dialog.getContentPane().add(btnOK);
+        dialog.pack();
     }
 
     private boolean downloadFile(URL url,String outputFileName,MainFrame parent){
@@ -38,19 +64,28 @@ public class DriverDownload implements ActionListener{
     @Override
     public void actionPerformed(ActionEvent e) {
         String fileName = "chromedriver.zip";
-        String cmd = e.getActionCommand();
-        
-        if(cmd == "Download driver"){
-            ChromeDriverDownloader cdd = new ChromeDriverDownloader();
-            // try {
-            //     URL url = new URL("https://chromedriver.storage.googleapis.com/111.0.5563.19/chromedriver_linux64.zip");
-            //     if(downloadFile(url, fileName, this.parent)){
-            //         System.out.println("Show dialog...");
-            //         MyDialog dialog = new MyDialog("ダウンロードが完了しました。",MyDialogType.OK_ONLY);
-            //     }
-            // } catch (MalformedURLException e1) {
-            //     e1.printStackTrace();
-            // }
+        if(e.getActionCommand() == "Download complete"){
+            dialog.dispose();
+        }else{
+            try {
+                URL url = new URL(downloadUrl);
+                if(downloadFile(url, fileName, this.parent)){
+                    dialog.setTitle("ダウンロード");
+                    dialog.setPreferredSize(new Dimension(200,200));
+                    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+
+                    // ダイアログのサイズを取得する
+                    Dimension dialogSize = dialog.getSize();
+            
+                    // ダイアログを中央に配置する
+                    int x = (int) (screenSize.getWidth() - dialogSize.getWidth()) / 2;
+                    int y = (int) (screenSize.getHeight() - dialogSize.getHeight()) / 2;
+                    dialog.setLocation(x, y);
+                    dialog.setVisible(true);
+                }
+            } catch (MalformedURLException e1) {
+                e1.printStackTrace();
+            }
         }
     }
 }

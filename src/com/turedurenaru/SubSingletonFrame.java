@@ -12,12 +12,13 @@ public class SubSingletonFrame extends JFrame implements ActionListener{
     private JTextArea pastArea;
     private JButton btnAnalysis;
     private MainFrame parentFrame;
+    private PasetPanel pp = new PasetPanel();
 
     private SubSingletonFrame(MainFrame parentFrame) {
         super();
         this.parentFrame = parentFrame;
         pastArea = new JTextArea();
-        getContentPane().add(pastArea,BorderLayout.CENTER);
+        getContentPane().add(pp,BorderLayout.CENTER);
         btnAnalysis = new JButton("解析");
         btnAnalysis.setActionCommand("Analysis");
         ArticleAnalysis action = new ArticleAnalysis(this.parentFrame,pastArea);
@@ -31,13 +32,14 @@ public class SubSingletonFrame extends JFrame implements ActionListener{
             uniqueInstance = new SubSingletonFrame(parentFrame);
 
             /** 親フレームのタイトルをそのまま表示 */
-            uniqueInstance.setTitle( parentFrame.getTitle() );
+            uniqueInstance.setTitle(parentFrame.getTitle());
 
             /** サイズと位置を指定 */
-            uniqueInstance.setBounds( 400, 300, 400, 200 );
-            uniqueInstance.setVisible( true );
+            uniqueInstance.setBounds(300, 200, 300, 200);
+            uniqueInstance.pack();
+            uniqueInstance.setVisible(true);
 
-            uniqueInstance.addWindowListener( new WindowAdapter() {
+            uniqueInstance.addWindowListener(new WindowAdapter(){
                                                   public void windowClosing( WindowEvent e ) {
                                                       // インスタンスも消滅させる
                                                       uniqueInstance = null;
@@ -53,6 +55,10 @@ public class SubSingletonFrame extends JFrame implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("Analysis button clicked");
+        System.out.println("Action");
+        if(e.getActionCommand() == "Analysis"){
+            System.out.println("Analysis button clicked");
+            SubPanel.cpArea.setText(pp.getValue());
+        }
     }
 }

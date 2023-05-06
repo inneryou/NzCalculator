@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
 public class MainPanel extends JPanel{
-    private InputPanel ip;
+    public static InputPanel ip;
     public MainPanel(){
         JScrollPane scrollPane = new JScrollPane();
         setLayout(new GridLayout(1,1));
